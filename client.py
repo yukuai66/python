@@ -8,7 +8,7 @@ import socket
 import urllib
 import os
 
-localIP = socket.gethostbyname(socket.gethostname())
+# localIP = socket.gethostbyname(socket.gethostname())
 
 def main():
     headers = {'content-type': 'application/json'}
@@ -26,13 +26,13 @@ def main():
         payload["params"][0]['cmdType'] = cmdType
         payload["params"][0]['url'] = 'http://'+ sys.argv[2] + ":4000/jsonrpc"
         payload["params"][0]['cmd'] = sys.argv[3]
-        payload["params"][0]['address'] = localIP
+        # payload["params"][0]['address'] = localIP
     elif cmdType == 'download':
         payload["params"][0]['cmdType'] = cmdType
         payload["params"][0]['url'] = 'http://'+ sys.argv[2] + ":4000/jsonrpc"
         payload["params"][0]['serverPath'] = sys.argv[3]
         payload["params"][0]['localPath'] = sys.argv[4]
-        payload["params"][0]['address'] = localIP
+        # payload["params"][0]['address'] = localIP
     # Example echo method
 
     response = requests.post(

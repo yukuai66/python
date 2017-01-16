@@ -6,6 +6,7 @@ import os
 import json
 import sys
 import time
+import socket
 
 reload(sys)
 sys.setdefaultencoding('UTF-8')
@@ -21,10 +22,12 @@ def application(request):
     # Dispatcher is dictionary {<method_name>: callable}
     # dispatcher["echo"] = lambda s: s
     # dispatcher["add"] = lambda a, b: a + b
+    # re = json.loads(request)
     jo = json.loads(request.data)
 
     cmdType = jo["params"][0]["cmdType"]
     errorMesage = ''
+    clientIP = request.access_route[0]
     #写入日志
 
     if cmdType == "syuc":
@@ -36,10 +39,10 @@ def application(request):
             errorMesage = '   错误 : 指令错误'
         if os.path.isdir(path+'/log.txt'):
             file = open('log.txt','w')
-            file.writelines("Time :" + time.strftime("%Y/%m/%d %I:%M:%S") + "   IP :" + jo["params"][0]["address"] + "   Command :" + cmd + errorMesage +"\n")
+            file.writelines("Time :" + time.strftime("%Y/%m/%d %I:%M:%S") + "   IP :" + clientIP + "   Command :" + cmd + errorMesage +"\n")
         else:
             file = open('log.txt','a')
-            file.writelines("Time :" + time.strftime("%Y/%m/%d %I:%M:%S") + "   IP :" + jo["params"][0]["address"] + "   Command :" + cmd + errorMesage +"\n")
+            file.writelines("Time :" + time.strftime("%Y/%m/%d %I:%M:%S") + "   IP :" + clientIP + "   Command :" + cmd + errorMesage +"\n")
 
         dispatcher['get']  = lambda d : {"success": "true","resule": 1,'shell':var}
 
@@ -59,10 +62,10 @@ def application(request):
 
         if os.path.isdir(path+'/log.txt'):
             file = open('log.txt','w')
-            file.writelines("Time :" + time.strftime("%Y/%m/%d %I:%M:%S") + "   IP :" + jo["params"][0]["address"] + "   Command :" + jo["params"][0]["cmdType"] + errorMesage +"\n")
+            file.writelines("Time :" + time.strftime("%Y/%m/%d %I:%M:%S") + "   IP :" + clientIP + "   Command :" + jo["params"][0]["cmdType"] + errorMesage +"\n")
         else:
             file = open('log.txt','a')
-            file.writelines("Time :" + time.strftime("%Y/%m/%d %I:%M:%S") + "   IP :" + jo["params"][0]["address"] + "   Command :" + jo["params"][0]["cmdType"] + errorMesage +"\n")
+            file.writelines("Time :" + time.strftime("%Y/%m/%d %I:%M:%S") + "   IP :" + clientIP + "   Command :" + jo["params"][0]["cmdType"] + errorMesage +"\n")
 
     response = JSONRPCResponseManager.handle(
         request.data, dispatcher)
